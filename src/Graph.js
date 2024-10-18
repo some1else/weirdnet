@@ -2,7 +2,7 @@ const MAX_EDGES = 6
 
 const SEED_DATA = require("./seedData.json")
 
-const ids = {
+const seedIds = {
   edges: SEED_DATA.edges.reduce(
     (maxId, edge) => (edge.id > maxId ? edge.id : maxId),
     0
@@ -11,6 +11,16 @@ const ids = {
     (maxId, vert) => (vert.id > maxId ? vert.id : maxId),
     0
   ),
+}
+
+function getSeedIds() {
+  return JSON.parse(JSON.stringify(seedIds))
+}
+
+let ids = getSeedIds()
+
+export function resetIds() {
+  ids = getSeedIds()
 }
 
 export function getNewId(scope) {
@@ -74,7 +84,7 @@ export function addNewVertex({ edges, vertices }, data = {}) {
   if (vertices.length === 3 && dataVerticesCount < 3) {
     const vert = vertices.find(vert => !vert.data)
     vert.data = { ...data }
-    const remainVertices = vertices.filter(v => v != vert)
+    const remainVertices = vertices.filter(v => v !== vert)
 
     if (dataVerticesCount + 1 === 1) {
       return {
@@ -142,7 +152,7 @@ export function addNewVertex({ edges, vertices }, data = {}) {
 }
 
 export function sanitizeGraph(graph) {
-  debugger
+  // debugger
 
   // if (graph.vertices.length < 4) return { graph: { ...graph }, newEdges: [] }
 
@@ -287,24 +297,24 @@ export function updateEdge({ edges, vertices }, id, mut) {
   }
 }
 
-export function removeEdges({ edges, vertices }, cond) {
-  const removeEdges = edges.filter(cond)
-  const remainEdges = edges.filter(e => !cond(e))
-  const cleanedVertices = vertices.map(vert => {
-    const remainVertEdges = vert.edges.filter(id =>
-      remainEdges.find(e => e.id === id)
-    )
-    return {
-      ...vert,
-      edges: remainVertEdges,
-    }
-  })
+// export function removeEdges({ edges, vertices }, cond) {
+//   const removeEdges = edges.filter(cond)
+//   const remainEdges = edges.filter(e => !cond(e))
+//   const cleanedVertices = vertices.map(vert => {
+//     const remainVertEdges = vert.edges.filter(id =>
+//       remainEdges.find(e => e.id === id)
+//     )
+//     return {
+//       ...vert,
+//       edges: remainVertEdges,
+//     }
+//   })
 
-  return {
-    edges: remainEdges,
-    vertices: cleanedVertices,
-  }
-}
+//   return {
+//     edges: remainEdges,
+//     vertices: cleanedVertices,
+//   }
+// }
 
 export function findLooseEdges({ edges, vertices }) {
   if (edges.length === 0) return 0
