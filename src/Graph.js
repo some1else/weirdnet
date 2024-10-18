@@ -1,6 +1,6 @@
-const MAX_EDGES = 6
+import SEED_DATA from "./seedData.json"
 
-const SEED_DATA = require("./seedData.json")
+const MAX_EDGES = 6
 
 const seedIds = {
   edges: SEED_DATA.edges.reduce(
