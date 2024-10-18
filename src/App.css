@@ -1,3 +1,17 @@
+@keyframes blink {
+  0% {
+    stroke: #282828;
+  }
+
+  50% {
+    stroke: #181818;
+  }
+
+  100% {
+    stroke: #282828;
+  }
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -8,28 +22,58 @@ body {
   color: white;
 }
 
-#root {
-  /* filter: invert(); */
-}
-
 circle {
   stroke: black;
 }
 
+.showLabel-false circle {
+  stroke: transparent;
+  opacity: 0.75;
+}
+
 line {
-  stroke: #222;
+  stroke: #282828;
   stroke-width: 2px;
+}
+
+.showLabel-true line {
+  animation: blink 4000ms infinite;
+}
+
+.showLabel-false line {
+  stroke-width: 1px;
+  stroke: transparent;
+  /* stroke: #222; */
 }
 
 text {
   user-select: none;
-  fill: #555;
-  font-size: 13px;
+  fill: #888;
+  font-size: 11px;
   font-weight: bold;
   font-weight: normal;
   text-shadow: 0px 1px black;
   -webkit-text-stroke: 1px black;
-  transform: translate(8px, 4px);
+  transform: translate(0.5%, 0.5%);
+}
+
+.stage-0 text {
+  font-size: 21px;
+}
+.stage-1 text {
+  font-size: 19px;
+}
+.stage-2 text {
+  font-size: 17px;
+}
+.stage-3 text {
+  font-size: 15px;
+}
+.stage-4 text {
+  font-size: 13px;
+}
+.stage-5 text {
+  font-size: 11px;
 }
 
 div.description {
@@ -39,5 +83,17 @@ div.description {
   padding: 4rem 8rem;
   font-size: 1rem;
   line-height: 1.75rem;
-  color: #666;
+  color: #888;
+}
+
+h1.loading-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-weight: normal;
+  font-size: 19px;
+  color: #888;
+  line-height: 180%;
 }
