@@ -1,5 +1,8 @@
-# grafpac
+# WeirdNet
 
-A network structure where joining a new node always costs two vertices.
+Shuffled concentric mind-map of WordNet concepts on a hexagonal lattice.
 
-[https://grafpac.netlify.app](https://grafpac.netlify.app)
+- It costs two vertices to add a new node.
+- New nodes are added on the perimeter.
+
+[https://weirdnet.xyz](https://weirdnet.xyz)
