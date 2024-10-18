@@ -10,7 +10,9 @@ import { grow, resetIds } from "./Graph"
 
 import "./App.css"
 
-import { words as lorem_ipsum_words } from "./lorem_ipsum"
+import { decodeWords } from "./wordnet"
+
+let WEIRD_WORDS
 
 const excluded = ["gps", "irs"]
 
@@ -63,17 +65,13 @@ function hexColorFor(id) {
 let wordmap = new Map()
 let mapped = []
 
-const weird_words = process.env.REACT_APP_WEIRD_WORDS
-  ? process.env.REACT_APP_WEIRD_WORDS.split(",")
-  : lorem_ipsum_words
-
 function getWord(id) {
   let word = wordmap.get(id)
   if (!word) {
-    word = weird_words[Math.floor(Math.random() * weird_words.length)]
+    word = WEIRD_WORDS[Math.floor(Math.random() * WEIRD_WORDS.length)]
     let retries = 0
     while ((mapped.includes(word) || excluded.includes(word)) && retries < 3) {
-      word = weird_words[Math.floor(Math.random() * weird_words.length)]
+      word = WEIRD_WORDS[Math.floor(Math.random() * WEIRD_WORDS.length)]
       retries++
     }
     word = word.replace(/_/g, " ")
@@ -150,10 +148,14 @@ class App extends PureComponent {
   }
 
   componentDidMount() {
-    this.animateInterval = setInterval(
-      this.animateGraph,
-      STAGES[0].animateDelayMs
-    )
+    decodeWords().then(newWords => {
+      WEIRD_WORDS = newWords
+
+      this.animateInterval = setInterval(
+        this.animateGraph,
+        STAGES[0].animateDelayMs
+      )
+    })
   }
 
   render() {
@@ -163,25 +165,25 @@ class App extends PureComponent {
       <div className="App">
         <div className="description">
           {this.state.totalStages < 5 && (
-            <>
+            <div>
               Shuffled concentric mind-map on a hexagonal lattice
               <br />
-            </>
+            </div>
           )}
           {this.state.totalStages < 3 && (
-            <>
+            <div>
               =======================================
               <br />
-            </>
+            </div>
           )}
           {this.state.vertices.length} WordNet concepts,{" "}
           {this.state.edges.length} associations
           {this.state.totalStages < 3 && (
-            <>
+            <div>
               <br />
               - It costs two vertices to add a new node.
               <br />- New nodes are added on the perimeter.
-            </>
+            </div>
           )}
         </div>
 
@@ -226,6 +228,7 @@ class App extends PureComponent {
                 // cy={Math.random() * window.innerHeight}
               />
             ))}
+
             {edges.map(({ source, target }) => (
               <ForceGraphLink
                 link={{ source, target }}
